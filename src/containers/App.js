@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
-import Card from '../components/Card';
 import CardList  from '../components/CardList'
+import SearchBox from '../components/SearchBox'
 
 class App extends React.Component{
 
   constructor(){
     super()
     this.state = {
-      robots: robots,
+      robots: [],
       searchfield: ""
     }
   }
@@ -19,12 +19,19 @@ class App extends React.Component{
       .then(users => this.setState({robots:users}));
   }
 
+  onSearch = (event) =>{
+    this.setState({searchfield:event.target.value})
+  }
+
   render(){
+    const filteredRobots = this.state.robots.filter(robot => {
+      return robot.name.toLowerCase().includes(this.state.searchfield.toLowerCase())
+    })
     return(
-      <div>
-          <h1>RoboFriends</h1>
-          <input type='searchfield'/>
-          <CardList robots={robots}/>
+      <div className='tc'>
+          <h1 className='f1'>RoboFriends</h1>
+          <SearchBox onSearch={this.onSearch}/>
+          <CardList robots={filteredRobots}/>
       </div>
     )
   }
